@@ -25,3 +25,8 @@ const APIGatewayProxyHandler = async (event) => {
     };
   }
 };
+
+
+module.exports = {
+  APIGatewayProxyHandler
+};
