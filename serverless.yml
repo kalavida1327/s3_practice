@@ -1,5 +1,5 @@
 # serverless.yml
-service: s3_practice
+service: s3practice
 provider:
   name: aws
   runtime: nodejs18.x
