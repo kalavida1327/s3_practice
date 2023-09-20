@@ -3,6 +3,8 @@ service: s3-practice-api
 provider:
   name: aws
   runtime: nodejs18.x
+  deploymentBucket:
+    name: serverless-examples-bucket
   apiGateway:
     # accepted binary type for file uploads
     binaryMediaTypes:
@@ -21,7 +23,7 @@ resources:
     MyServerlessExampleBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: serverless-s3-bucket
+        BucketName: serverless-s1-bucket
     # define a policy for an existing role
     UploadFilePolicy:
       Type: AWS::IAM::Policy
