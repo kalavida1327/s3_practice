@@ -1,5 +1,5 @@
 # serverless.yml
-service: s3-practice-api
+service: upload-download-api
 provider:
   name: aws
   runtime: nodejs18.x
@@ -11,7 +11,7 @@ provider:
 functions:
   # sync upload
   uploadFile:
-    handler: s3.APIGatewayProxyHandler
+    handler: api.APIGatewayProxyHandler
     events:
       - http:
           method: post
