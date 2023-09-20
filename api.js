@@ -10,7 +10,7 @@ const APIGatewayProxyHandler = async (event) => {
 
     // Access the uploaded file and other fields from the formData object
     const { file, fields } = formData;
-    const tags = { filename: file.filename };
+    const tags = { filename: file?.filename };
 
     await s3
       .putObject({
