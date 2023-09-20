@@ -11,14 +11,14 @@ const APIGatewayProxyHandler = async (event) => {
 
     // Access the uploaded file and other fields from the formData object
     const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
-    const file = files[0]; // Assuming there's only one file in the form data
+    console.log('formData', formData);
     const tags = { filename: fields.filename }; // Use 'fields.filename'
 
     await s3
       .putObject({
         Bucket: BUCKET_NAME,
-        Key: fields.filename || file.filename,
-        Body: Buffer.from(file.content, 'base64'), // Convert content to a buffer
+        Key: fields.filename,
+        Body: Buffer.from(files.content, 'base64'), // Convert content to a buffer
         Tagging: queryString.encode(tags),
       })
       .promise();
