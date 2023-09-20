@@ -1,6 +1,7 @@
 const multipart = require('aws-lambda-multipart-parser');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
+const queryString = require('querystring'); // Import the queryString module
 
 const BUCKET_NAME = 'your-s3-bucket-name';
 
@@ -9,8 +10,9 @@ const APIGatewayProxyHandler = async (event) => {
     const formData = multipart.parse(event, true); // Set the second argument to true to parse JSON fields
 
     // Access the uploaded file and other fields from the formData object
-    const { file, fields } = formData;
-    const tags = { filename: file?.filename };
+    const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
+    const file = files[0]; // Assuming there's only one file in the form data
+    const tags = { filename: fields.filename }; // Use 'fields.filename'
 
     await s3
       .putObject({
