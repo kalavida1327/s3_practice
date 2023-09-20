@@ -10,7 +10,7 @@ const APIGatewayProxyHandler = async (event) => {
 
   console.log('--------Received event:', JSON.stringify(event, null, 2));
 
-    const formData = multipart.parse(event, true); // Set the second argument to true to parse JSON fields
+    const formData = multipart.parse(event); // Set the second argument to true to parse JSON fields
 
     // Access the uploaded file and other fields from the formData object
     const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
