@@ -2,7 +2,6 @@ const APIGatewayProxyHandler = async (event) => {
   const { file, fields } = await parseFormData(event);
   const tags = { filename: file.filename };
   try {
-    
     await s3Client
       .putObject({
         Bucket: BUCKET_NAME,
