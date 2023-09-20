@@ -1,5 +1,5 @@
 # serverless.yml
-service: s3-crud-api
+service: s3-practice-api
 provider:
   name: aws
   runtime: nodejs18.x
@@ -10,7 +10,7 @@ provider:
 functions:
   # sync upload
   uploadFile:
-    handler: build.uploadFile
+    handler: build.APIGatewayProxyHandler
     events:
       - http:
           method: post
