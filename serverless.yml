@@ -42,4 +42,4 @@ resources:
                     - Ref: MyServerlessExampleBucket
                     - "/*"
         Roles:
-          - serverless-example-dev-us-east-1-role
+          - practice_s3
