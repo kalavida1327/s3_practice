@@ -7,6 +7,9 @@ const BUCKET_NAME = 'your-s3-bucket-name';
 
 const APIGatewayProxyHandler = async (event) => {
   try {
+
+    console.log('------------event---------------', event);
+
     const formData = multipart.parse(event, true); // Set the second argument to true to parse JSON fields
 
     // Access the uploaded file and other fields from the formData object
