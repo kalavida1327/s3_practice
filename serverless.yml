@@ -3,6 +3,7 @@ service: s3-practice-api
 provider:
   name: aws
   runtime: nodejs18.x
+  region: ap-south-1
   apiGateway:
     # accepted binary type for file uploads
     binaryMediaTypes:
@@ -10,7 +11,7 @@ provider:
 functions:
   # sync upload
   uploadFile:
-    handler: build.APIGatewayProxyHandler
+    handler: s3.APIGatewayProxyHandler
     events:
       - http:
           method: post
@@ -28,7 +29,7 @@ resources:
       Properties:
         PolicyName: UploadObjects
         PolicyDocument:
-          Version: 'policy date'
+          Version: '2012-10-17'
           Statement:
             - Sid: LambdaPutObjects
               Effect: Allow
