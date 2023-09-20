@@ -3,8 +3,6 @@ service: s3-practice-api
 provider:
   name: aws
   runtime: nodejs18.x
-  deploymentBucket:
-    name: serverless-examples-bucket
   apiGateway:
     # accepted binary type for file uploads
     binaryMediaTypes:
