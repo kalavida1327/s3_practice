@@ -1,5 +1,5 @@
 # serverless.yml
-service: upload-download-api
+service: s3_practice
 provider:
   name: aws
   runtime: nodejs18.x
