@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 const queryString = require('querystring'); // Import the queryString module
 
-const BUCKET_NAME = 'your-s3-bucket-name';
+const BUCKET_NAME = 'serverless-s4-bucket';
 
 const APIGatewayProxyHandler = async (event) => {
   try {
