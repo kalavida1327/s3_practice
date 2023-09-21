@@ -14,7 +14,7 @@ const APIGatewayProxyHandler = async (event) => {
 
     // Access the uploaded file and other fields from the formData object
     const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
-  console.log('----------Parsed formData:', JSON.stringify(formData, null, 2));
+  console.log('----------Parsed formData:', formData);
     const tags = { filename: fields.filename }; // Use 'fields.filename'
 
     await s3
@@ -30,7 +30,7 @@ const APIGatewayProxyHandler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({ description: 'file created', result: 'ok' }),
     };
-    
+
   } catch (error) {
     // Handle errors
     console.error("------error---------",error);
