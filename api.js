@@ -50,7 +50,6 @@ module.exports.handle = async (event) => {
       .putObject({
         Bucket: BUCKET,
         Key: filename,
-        ACL: 'public-read',
         Body: data,
       })
       .promise();
