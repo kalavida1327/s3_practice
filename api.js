@@ -30,6 +30,7 @@ const APIGatewayProxyHandler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({ description: 'file created', result: 'ok' }),
     };
+    
   } catch (error) {
     // Handle errors
     console.error("------error---------",error);

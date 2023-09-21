@@ -43,4 +43,4 @@ resources:
                     - Ref: MyServerlessExampleBucket
                     - "/*"
         Roles:
-          - practice_s3
+          - newRole
