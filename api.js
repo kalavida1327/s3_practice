@@ -6,7 +6,7 @@ const BUCKET = 'serverless-s4-bucket';
 const s3 = new AWS.S3();
 
 function extractFile(event) {
-  const contentType = event.headers['content-type'];
+  const contentType = event.headers['Content-Type'];
   if (!contentType) {
     throw new Error('Content-Type header is missing in the request.');
   }
