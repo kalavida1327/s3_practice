@@ -11,7 +11,7 @@ provider:
 functions:
   # sync upload
   uploadFile:
-    handler: api.uploadFile
+    handler: api.handle
     events:
       - http:
           method: post

@@ -1,54 +1,52 @@
-const multipart = require('aws-lambda-multipart-parser');
 const AWS = require('aws-sdk');
+const { Console } = require('console');
+const parseMultipart = require('parse-multipart');
+
+const BUCKET = 'serverless-s4-bucket';
+
 const s3 = new AWS.S3();
-const queryString = require('querystring'); // Import the queryString module
 
-const BUCKET_NAME = 'serverless-s4-bucket';
 
-const APIGatewayProxyHandler = async (event) => {
-  try {
-    console.log('--------Received event:', JSON.stringify(event, null, 2));
-if ( event.body) {
-  // Decode the base64 body if needed
-  const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
-  console.log('Decoded body:', decodedBody);
+function extractFile(event) {
+  const boundary = parseMultipart.getBoundary(event.headers['content-type']);
+  const parts = parseMultipart.Parse(
+    Buffer.from(event.body, 'base64'),
+    boundary
+  );
+  console.log('--------parts', parts);
+  const [{ filename, data }] = parts;
+
+  return {
+    filename,
+    data,
+  };
 }
-
-const formData = multipart.parse(decodedBody);
-
-console.log('----------Parsed formData:', formData);
-
-    // Access the uploaded file and other fields from the formData object
-    const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
-    const tags = { filename: fields.filename }; // Use 'fields.filename'
-
+module.exports.handle = async (event) => {
+  try {
+    const { filename, data } = extractFile(event);
+    console.log('---------data', data);
     await s3
       .putObject({
-        Bucket: BUCKET_NAME,
-        Key: fields.filename,
-        Body: Buffer.from(files.content, 'base64'), // Convert content to a buffer
-        Tagging: queryString.encode(tags),
+        Bucket: BUCKET,
+        Key: filename,
+        ACL: 'public-read',
+        Body: data,
       })
       .promise();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ description: 'file created', result: 'ok' }),
-    };
-
-  } catch (error) {
-    // Handle errors
-    console.error("------error---------",error);
-    return {
-      statusCode: 409,
       body: JSON.stringify({
-        description: 'something went wrong',
-        result: 'error',
+        link: `https://${BUCKET}.s3.amazonaws.com/${filename}`,
       }),
+    };
+  } catch (err) {
+    console.log('error-----', err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: err.stack }),
     };
   }
 };
 
-module.exports = {
-  APIGatewayProxyHandler,
-};
+
