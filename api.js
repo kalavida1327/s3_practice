@@ -1,24 +1,39 @@
-const uploadFile = async (event) => {
-  console.log('=----------event1', event);
-  const formdata = await parseFormData(event);
-  console.log('---------Praedformdata1', formdata);
-  // const tags = { filename: file.filename };
-  const tags = { filename: file.filename };
+const multipart = require('aws-lambda-multipart-parser');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+const queryString = require('querystring'); // Import the queryString module
+
+const BUCKET_NAME = 'your-s3-bucket-name';
+
+const APIGatewayProxyHandler = async (event) => {
   try {
-    await s3Client
+
+  console.log('--------Received event:', JSON.stringify(event, null, 2));
+
+    const formData = multipart.parse(event); // Set the second argument to true to parse JSON fields
+
+    // Access the uploaded file and other fields from the formData object
+    const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
+  console.log('----------Parsed formData:', formData);
+    const tags = { filename: fields.filename }; // Use 'fields.filename'
+
+    await s3
       .putObject({
         Bucket: BUCKET_NAME,
-        Key: fields.filename || file.filename,
-        Body: file.content,
+        Key: fields.filename,
+        Body: Buffer.from(files.content, 'base64'), // Convert content to a buffer
         Tagging: queryString.encode(tags),
       })
       .promise();
+
     return {
       statusCode: 200,
       body: JSON.stringify({ description: 'file created', result: 'ok' }),
     };
-  } catch (_error) {
-    // this is not ideal error handling, but good enough for the purpose of this example
+
+  } catch (error) {
+    // Handle errors
+    console.error("------error---------",error);
     return {
       statusCode: 409,
       body: JSON.stringify({
@@ -29,4 +44,6 @@ const uploadFile = async (event) => {
   }
 };
 
-module.exports = { uploadFile }; // Export the function if needed
+module.exports = {
+  APIGatewayProxyHandler,
+};
