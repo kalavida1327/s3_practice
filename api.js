@@ -7,14 +7,19 @@ const BUCKET_NAME = 'your-s3-bucket-name';
 
 const APIGatewayProxyHandler = async (event) => {
   try {
+    console.log('--------Received event:', JSON.stringify(event, null, 2));
+if (event.isBase64Encoded && event.body) {
+  // Decode the base64 body if needed
+  const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
+  console.log('Decoded body:', decodedBody);
+}
 
-  console.log('--------Received event:', JSON.stringify(event, null, 2));
+const formData = multipart.parse(decodedBody);
 
-    const formData = multipart.parse(event); // Set the second argument to true to parse JSON fields
+console.log('----------Parsed formData:', formData);
 
     // Access the uploaded file and other fields from the formData object
     const { fields, files } = formData; // Use 'fields' and 'files' instead of 'file'
-  console.log('----------Parsed formData:', formData);
     const tags = { filename: fields.filename }; // Use 'fields.filename'
 
     await s3
