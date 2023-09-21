@@ -1,26 +1,47 @@
 const AWS = require('aws-sdk');
-const { Console } = require('console');
 const parseMultipart = require('parse-multipart');
 
 const BUCKET = 'serverless-s4-bucket';
 
 const s3 = new AWS.S3();
 
-
 function extractFile(event) {
-  const boundary = parseMultipart.getBoundary(event.headers['content-type']);
+  const contentType = event.headers['content-type'];
+  if (!contentType) {
+    throw new Error('Content-Type header is missing in the request.');
+  }
+
+  const boundary = parseMultipart.getBoundary(contentType);
+  if (!boundary) {
+    throw new Error(
+      'Unable to determine the boundary from the Content-Type header.'
+    );
+  }
+
   const parts = parseMultipart.Parse(
     Buffer.from(event.body, 'base64'),
     boundary
   );
   console.log('--------parts', parts);
+
+  if (!parts || parts.length === 0) {
+    throw new Error('No parts found in the multipart request.');
+  }
+
   const [{ filename, data }] = parts;
+
+  if (!filename || !data) {
+    throw new Error(
+      'Invalid or missing filename or data in the multipart request.'
+    );
+  }
 
   return {
     filename,
     data,
   };
 }
+
 module.exports.handle = async (event) => {
   try {
     const { filename, data } = extractFile(event);
@@ -44,9 +65,7 @@ module.exports.handle = async (event) => {
     console.log('error-----', err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: err.stack }),
+      body: JSON.stringify({ message: err.message }),
     };
   }
 };
-
-
