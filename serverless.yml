@@ -11,7 +11,7 @@ provider:
 functions:
   # sync upload
   uploadFile:
-    handler: api.APIGatewayProxyHandler
+    handler: api.uploadFile
     events:
       - http:
           method: post
