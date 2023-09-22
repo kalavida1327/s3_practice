@@ -14,8 +14,15 @@ functions:
     handler: api.handle
     events:
       - http:
-          method: post
+          method: POST
           path: upload
+          cors: true
+  downloadFile:
+    handler: api.handle
+    events:
+      - http:
+          method: GET
+          path: download
           cors: true
 resources:
   Resources:
