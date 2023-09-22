@@ -49,23 +49,6 @@ resources:
                   - - "arn:aws:s3:::"
                     - Ref: MyServerlessExampleBucket
                     - "/*"
-    # Add a new policy for GetObject
-    GetObjectPolicy:
-      Type: AWS::IAM::Policy
-      Properties:
-        PolicyName: GetObjects
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Sid: LambdaGetObjects
-              Effect: Allow
-              Action:
-                - s3:GetObject
-              Resource:
-                Fn::Join:
-                  - ""
-                  - - "arn:aws:s3:::"
-                    - Ref: MyServerlessExampleBucket
-                    - "/*"                
+     
         Roles:
           - newRole
