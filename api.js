@@ -8,6 +8,7 @@ const s3 = new AWS.S3();
 function extractFile(event) {
   const contentType = event.headers['Content-Type'];
 
+  
   const boundary = parseMultipart.getBoundary(contentType);
 
   const parts = parseMultipart.Parse(
